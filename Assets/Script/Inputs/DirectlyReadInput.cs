@@ -1,13 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
 public class DirectlyReadInput : MonoBehaviour
 {
     private IPlayereble _playereble;
-
-    private bool _isJump = false;
     private Vector3 _movement;
+    private bool _isJump = false;
 
     private void Start()
     {
@@ -16,17 +14,14 @@ public class DirectlyReadInput : MonoBehaviour
 
     private void Update()
     {
-        if (Keyboard.current.anyKey == null || Mouse.current.press == null) { return; }
-
-        if (Keyboard.current.spaceKey.wasPressedThisFrame || Mouse.current.backButton.wasPressedThisFrame)
+        if (Keyboard.current.anyKey == null) { return; }
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
         {
             _isJump = true;
         }
-
         if (Keyboard.current.aKey.isPressed || Keyboard.current.sKey.isPressed || Keyboard.current.dKey.isPressed || Keyboard.current.wKey.isPressed)
         {
             Moveble moveble = new Moveble();
-
             if (Keyboard.current.wKey.isPressed)
             {
                 moveble.Ypos = 1;
@@ -54,7 +49,6 @@ public class DirectlyReadInput : MonoBehaviour
             _playereble.Jump();
             _isJump = false;
         }
-
         if (_movement != Vector3.zero)
         {
             _playereble.Move(_movement);

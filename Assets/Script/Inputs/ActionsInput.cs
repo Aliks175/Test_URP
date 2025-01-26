@@ -3,22 +3,23 @@ using UnityEngine.InputSystem;
 
 public class ActionsInput : MonoBehaviour
 {
-    private IPlayereble playereble;
-    MyInputActions inputActions;
+    private IPlayereble _playereble;
+    private MyInputActions _inputActions;
 
     private void Start()
     {
-        inputActions = new MyInputActions();
-        playereble = GetComponent<IPlayereble>();
-        inputActions. Player.Jump.Enable();
-        inputActions.Player.Move.Enable();
-        inputActions.Player.Jump.performed += OnJump;
+        _inputActions = new MyInputActions();
+        _playereble = GetComponent<IPlayereble>();
+        _inputActions.Player.Enable();
+        _inputActions.Test.Enable();
+        _inputActions.Player.Jump.performed += OnJump;
+        _inputActions.Test.SendMasage.performed += Spam;
     }
 
 
     private void FixedUpdate()
     {
-        if (inputActions.Player.Move.IsPressed())
+        if (_inputActions.Player.Move.IsPressed())
         {
             OnMove();
         }
@@ -26,22 +27,17 @@ public class ActionsInput : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext callback)
     {
-        if (callback.phase == InputActionPhase.Performed)
-        {
-            playereble.Jump();
-        }
+            _playereble.Jump();
     }
 
     public void OnMove()
     {
-        Vector3 vector2 = inputActions.Player.Move.ReadValue<Vector2>();
-        playereble.Move(new Vector3(vector2.x, 0, vector2.y));
+        Vector2 vector2 = _inputActions.Player.Move.ReadValue<Vector2>();
+        _playereble.Move(new Vector3(vector2.x, 0, vector2.y));
     }
 
-    public void OnMove(InputAction.CallbackContext callback)
+    private void Spam(InputAction.CallbackContext callback)
     {
-        Vector2 vector2 = callback.ReadValue<Vector2>();
-        playereble.Move(vector2);
+            Debug.Log("ActionsInput Spam " + callback.phase);
     }
-
 }

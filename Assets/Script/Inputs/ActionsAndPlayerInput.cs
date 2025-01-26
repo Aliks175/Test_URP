@@ -4,15 +4,15 @@ using UnityEngine.InputSystem;
 public class ActionsAndPlayerInput : MonoBehaviour
 {
     private PlayerInput _playerInput;
-    private MyInputActions inputActions;
+    private MyInputActions _inputActions;
     private IPlayereble _playereble;
 
     private void Start()
     {
         _playereble = GetComponent<IPlayereble>();
         _playerInput = GetComponent<PlayerInput>();
-        inputActions = new MyInputActions();
-        inputActions.Player.Enable();
+        _inputActions = new MyInputActions();
+        _inputActions.Player.Enable();
         Debug.Log("Set start - " + _playerInput.currentActionMap);
     }
 
@@ -20,8 +20,8 @@ public class ActionsAndPlayerInput : MonoBehaviour
     {
         if (Mouse.current.forwardButton.wasPressedThisFrame)
         {
-            _playerInput.SwitchCurrentActionMap("UI");//GamePlay //Ui
-            Debug.Log("Set - Ui");
+            _playerInput.SwitchCurrentActionMap("Test");//GamePlay //Ui
+            Debug.Log("Set - Test");
         }
 
         if (Mouse.current.backButton.wasPressedThisFrame)
@@ -32,7 +32,7 @@ public class ActionsAndPlayerInput : MonoBehaviour
 
         if (Keyboard.current.jKey.wasPressedThisFrame)
         {
-            Debug.Log($"  inputActions.Ui.enabled {inputActions.UI.enabled}\n inputActions.Player.enabled {inputActions.Player.enabled}");
+            Debug.Log($"  inputActions.Test.enabled {_inputActions.Test.enabled}\n inputActions.Player.enabled {_inputActions.Player.enabled}");
 
             Debug.Log("Now - " + _playerInput.currentActionMap);
         }
@@ -59,15 +59,9 @@ public class ActionsAndPlayerInput : MonoBehaviour
         }
     }
 
-    //private void Move(InputAction.CallbackContext callback)
-    //{
-    //    Vector2 move = callback.ReadValue<Vector2>();
-    //    _playereble.Move(new Vector3(move.x, 0, move.y));
-    //}
-
     private void OnMove()
     {
-        Vector3 vector2 = inputActions.Player.Move.ReadValue<Vector2>();
+        Vector2 vector2 = _inputActions.Player.Move.ReadValue<Vector2>();
         _playereble.Move(new Vector3(vector2.x, 0, vector2.y));
     }
 }
