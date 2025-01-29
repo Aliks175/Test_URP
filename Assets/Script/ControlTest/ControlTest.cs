@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public interface IPlayereble
+public interface IMoveble
 {
     void Jump();
     void Move(Vector3 vector2);
 }
 
-public class ControlTest : MonoBehaviour, IPlayereble
+public class ControlTest : MonoBehaviour, IMoveble
 {
     [SerializeField] private float _speed;
     [SerializeField] private float _heightJump;
@@ -17,9 +17,16 @@ public class ControlTest : MonoBehaviour, IPlayereble
         _rigidbody = GetComponent<Rigidbody>();
     }
 
+
+    private void FixedUpdate()
+    {
+        
+    }
+
+
     public void Move(Vector3 vector2)
     {
-        _rigidbody.AddForce(vector2 * _speed,ForceMode.Impulse);
+        //_rigidbody.AddForce(vector2 * _speed, ForceMode.Impulse);
     }
 
     public void Jump()

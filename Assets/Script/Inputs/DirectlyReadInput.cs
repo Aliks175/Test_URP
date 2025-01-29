@@ -3,13 +3,13 @@ using UnityEngine.InputSystem;
 
 public class DirectlyReadInput : MonoBehaviour
 {
-    private IPlayereble _playereble;
+    private IMoveble _playereble;
     private Vector3 _movement;
     private bool _isJump = false;
 
     private void Start()
     {
-        _playereble = GetComponent<IPlayereble>();
+        _playereble = GetComponent<IMoveble>();
     }
 
     private void Update()

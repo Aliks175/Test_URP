@@ -3,17 +3,17 @@ using UnityEngine.InputSystem;
 
 public class ActionsInput : MonoBehaviour
 {
-    private IPlayereble _playereble;
+    private IMoveble _playereble;
     private MyInputActions _inputActions;
 
     private void Start()
     {
         _inputActions = new MyInputActions();
-        _playereble = GetComponent<IPlayereble>();
+        _playereble = GetComponent<IMoveble>();
         _inputActions.Player.Enable();
-        _inputActions.Test.Enable();
-        _inputActions.Player.Jump.performed += OnJump;
-        _inputActions.Test.SendMasage.performed += Spam;
+        //_inputActions.Test.Enable();
+        //_inputActions.Player.Jump.performed += OnJump;
+        //_inputActions.Test.SendMasage.performed += Spam;
     }
 
 

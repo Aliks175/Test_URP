@@ -10,14 +10,23 @@
                     "type": "Value",
                     "id": "9984a56c-6855-46d6-b226-5a497a84e310",
                     "expectedControlType": "Vector2",
-                    "processors": "",
+                    "processors": "NormalizeVector2",
                     "interactions": "",
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Jump",
+                    "name": "Attack",
                     "type": "Button",
-                    "id": "62f48b75-b29b-4c7c-bf38-fc87442ea03c",
+                    "id": "b0d0b783-a29a-49af-94e7-3ea0cd48aff7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "3df7bf99-26fc-4e38-8e9e-126b30b8c83f",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -85,7 +94,7 @@
                     "id": "7c24b206-39f5-4098-b55e-cba199e21049",
                     "path": "2DVector",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "StickDeadzone",
                     "groups": "",
                     "action": "Move",
                     "isComposite": true,
@@ -137,12 +146,45 @@
                 },
                 {
                     "name": "",
-                    "id": "af74c8ca-ccf9-4680-943f-f640be5242a6",
-                    "path": "<Keyboard>/space",
+                    "id": "9eb1b401-86de-4bca-9a02-7b6323b10476",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard",
-                    "action": "Jump",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b15edfa3-6b2c-485f-a859-81ab14aa7af2",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c194cc7a-e468-4f9e-a647-1c40c97930de",
+                    "path": "<Keyboard>/p",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4c693b02-d273-4a2a-83e5-5d8c6de295f8",
+                    "path": "<DualShockGamepad>/start",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -157,6 +199,15 @@
                     "type": "PassThrough",
                     "id": "ebaf78f7-1eb1-4363-8122-e96e0e998db4",
                     "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "38d014d6-1a77-48dd-b7f5-8f6d7c4ac559",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -510,6 +561,28 @@
                 },
                 {
                     "name": "",
+                    "id": "5d07fbaa-cc98-47ab-904b-4333cb5d6443",
+                    "path": "<Keyboard>/p",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4b199d39-3169-48a2-84a5-a23c4b5a67d9",
+                    "path": "<Gamepad>/start",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "a06b371e-aa6e-40ae-a8e1-34eeafe08f0d",
                     "path": "*/{Submit}",
                     "interactions": "",
@@ -659,34 +732,6 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "Test",
-            "id": "9319e9fc-bb6b-4899-891a-19492a1463f9",
-            "actions": [
-                {
-                    "name": "SendMasage",
-                    "type": "Button",
-                    "id": "b31ffd84-1b18-4f23-99ef-39d897a34ecc",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "f527c829-995a-4e00-b1f3-33ff7615fdd0",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard",
-                    "action": "SendMasage",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
