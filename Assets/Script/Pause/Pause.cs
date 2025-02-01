@@ -1,21 +1,38 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Pause : MonoBehaviour
 {
-    [SerializeField] private GameObject _pausePanel;
-    
-    public void ControlTime(bool timeStop)
+    private bool _paused = false;
+    public bool Paused { get{ return _paused; } private set { _paused = value; } }
+
+    public void OnPause(PlayerCharecterV1_3 playerCharecterV1_3)
+    {
+        Paused = !Paused;
+        if (Paused)
+        {
+            playerCharecterV1_3.EnablePauseMenuControls();
+        }
+        else
+        {
+            playerCharecterV1_3.EnableGameplayControls();
+
+        }
+        ControlTime(Paused);
+    }
+
+    private void ControlTime(bool timeStop)
     {
         if (timeStop)
         {
             Time.timeScale = 0f;
-
+            
         }
         else 
         {
             Time.timeScale = 1f;
         
         }
-        _pausePanel.SetActive(timeStop);
     }
 }

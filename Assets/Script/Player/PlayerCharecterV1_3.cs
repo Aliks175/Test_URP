@@ -31,6 +31,7 @@ public class PlayerCharecterV1_3 : MonoBehaviour
         _playerAnimation.SetupPlayerAnimation();
         _actions = new MyInputActions();
         _actions.Player.Enable();
+        Debug.Log("New " + _actions.Player.Attack.name);
     }
 
     private void Update()
@@ -40,17 +41,10 @@ public class PlayerCharecterV1_3 : MonoBehaviour
         UpdatePlayerAnimationMovement();
     }
 
-    //private void Rebild()
-    //{
-    //    _actions.Player.Disable();
-    //    _actions.Player.Attack.PerformInteractiveRebinding().OnComplete(callback =>
-    //    {
-    //        Debug.Log(callback);
-    //        callback.Dispose();
-    //        _actions.Player.Enable();
-    //    })
-    //        .Start();
-    //}
+    public MyInputActions GetMyInputActions()
+    {
+        return _actions;
+    }
 
     public void EnableGameplayControls()
     {
@@ -105,8 +99,8 @@ public class PlayerCharecterV1_3 : MonoBehaviour
     {
         if (value.phase == InputActionPhase.Performed)
         {
-        Vector2 inputMovement = value.ReadValue<Vector2>();
-        _rawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
+            Vector2 inputMovement = value.ReadValue<Vector2>();
+            _rawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
         }
         if (value.phase == InputActionPhase.Canceled)
         {
