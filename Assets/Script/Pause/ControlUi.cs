@@ -5,24 +5,25 @@ using UnityEngine.EventSystems;
 
 public class ControlUi : MonoBehaviour
 {
-    [SerializeField] private GameObject _menuPanel;
     [SerializeField] private GameObject _elementToFocus;
     [SerializeField] private List<GameObject> _elementToOff;
+    [SerializeField] private List<GameObject> _elementToOn;
 
     public void ControlFocusElement(bool change)
     {
-        OffElementUi();
-        _elementToFocus.SetActive(change);
-        _menuPanel.SetActive(change);
+        ControlActiveElementUi(false, _elementToOff);
+       
+        ControlActiveElementUi(change, _elementToOn);
+        
         EventSystem.current.SetSelectedGameObject(_elementToFocus);
     }
 
-    private void OffElementUi()
+    private void ControlActiveElementUi(bool isActive, List<GameObject> gameObjects)
     {
-        if (_elementToFocus == null) { return; }
-        for (int i = 0; i < _elementToOff.Count; i++)
+        if(gameObjects==null) {return; }    
+        for (int i = 0; i < gameObjects.Count; i++)
         {
-            _elementToOff[i].SetActive(false);
+            gameObjects[i].SetActive(isActive);
         }
     }
 }

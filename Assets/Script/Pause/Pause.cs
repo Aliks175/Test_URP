@@ -17,7 +17,6 @@ public class Pause : MonoBehaviour
         else
         {
             playerCharecterV1_3.EnableGameplayControls();
-
         }
         ControlTime(Paused);
     }
@@ -27,12 +26,10 @@ public class Pause : MonoBehaviour
         if (timeStop)
         {
             Time.timeScale = 0f;
-            
         }
         else 
         {
             Time.timeScale = 1f;
-        
         }
     }
 }
