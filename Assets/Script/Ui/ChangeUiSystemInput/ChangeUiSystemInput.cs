@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class ChangeUiSystemInput : MonoBehaviour
 {
+    [SerializeField] private GameObject _blackPanel;
     [SerializeField] private GameObject _panelKeyboard;
     [SerializeField] private GameObject _panelGamepad;
     [SerializeField] private Slider _slider;
@@ -20,5 +21,6 @@ public class ChangeUiSystemInput : MonoBehaviour
                 _panelKeyboard.SetActive(false);
                 break;
         }
+        _blackPanel.SetActive(false);
     }
 }

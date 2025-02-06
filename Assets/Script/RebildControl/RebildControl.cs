@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
 ////TODO: localization support
 
@@ -164,7 +163,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         /// <returns></returns>
         public bool ResolveActionAndBinding(out InputAction action, out int bindingIndex)
         {
-            
+
             bindingIndex = -1;
 
             action = m_Action?.action;
@@ -219,17 +218,29 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         {
             if (!ResolveActionAndBinding(out var action, out var bindingIndex))
                 return;
+            ///здесь я хочу когда уже есть привязка с этой клавишей , то та привязка удаляется 
+            if (SwapResetBindings(action, bindingIndex))
+            {
+                UpdateBindingDisplay();
+                return;
+            }
 
             if (action.bindings[bindingIndex].isComposite)
             {
                 // It's a composite. Remove overrides from part bindings.
                 for (var i = bindingIndex + 1; i < action.bindings.Count && action.bindings[i].isPartOfComposite; ++i)
+                {
                     action.RemoveBindingOverride(i);
+                }
+                SwapResetBindingsComposite(action, bindingIndex);
             }
             else
             {
                 action.RemoveBindingOverride(bindingIndex);
             }
+
+
+
             UpdateBindingDisplay();
         }
 
@@ -271,12 +282,20 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
             // Configure the rebind.
             m_RebindOperation = action.PerformInteractiveRebinding(bindingIndex)
+
+                .WithControlsExcluding("<Mouse>/leftButton")
+                .WithControlsExcluding("<Mouse>/rightButton")
+                .WithControlsExcluding("<Pointer>/delta")
+                .WithControlsExcluding("<Mouse>/press")
+                .WithControlsExcluding("<Pointer>/position")
+                .WithCancelingThrough("<Keyboard>/escape")
                 .OnCancel(
                     operation =>
                     {
                         m_RebindStopEvent?.Invoke(this, operation);
                         if (m_RebindOverlay != null)
                             m_RebindOverlay.SetActive(false);
+
                         UpdateBindingDisplay();
                         CleanUp();
                     })
@@ -286,6 +305,15 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                         if (m_RebindOverlay != null)
                             m_RebindOverlay.SetActive(false);
                         m_RebindStopEvent?.Invoke(this, operation);
+                        if (CheckDuplicateBindings(action, bindingIndex, allCompositeParts))
+                        {
+                            action.RemoveBindingOverride(bindingIndex);
+                            CleanUp();
+                            PerformInteractiveRebind(action, bindingIndex, allCompositeParts);
+                            return;
+
+                        }
+
                         UpdateBindingDisplay();
                         CleanUp();
 
@@ -374,6 +402,94 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             }
         }
 
+        private bool SwapResetBindings(InputAction action, int bindingIndex)
+        {
+            // Cache a reference to the current binding.
+            InputBinding newBinding = action.bindings[bindingIndex];
+            // Check all of the bindings in the current action map to make sure there are no duplicates.
+            for (int i = 0; i < action.actionMap.bindings.Count; ++i)
+            {
+                InputBinding binding = action.actionMap.bindings[i];
+                if (binding.action == newBinding.action)
+                {
+                    continue;
+                }
+
+                if (binding.effectivePath == newBinding.path)
+                {
+                    Debug.Log("Duplicate binding found for reset to default: " + newBinding.effectivePath);
+                    // Swap the two actions.
+                    action.actionMap.FindAction(binding.action).ApplyBindingOverride(i, newBinding.overridePath);
+                    action.RemoveBindingOverride(bindingIndex);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void SwapResetBindingsComposite(InputAction action, int bindingIndex)
+        {
+            InputBinding oldBinding = action.bindings[bindingIndex];
+            for (int i = 0; i < action.actionMap.bindings.Count; i++)
+            {
+                InputBinding binding = action.actionMap.bindings[i];
+                if (binding.action == oldBinding.action)
+                {
+                    continue;
+                }
+                for (var j = bindingIndex + 1; j < action.bindings.Count && action.bindings[j].isPartOfComposite; ++j)
+                {
+                    if (binding.effectivePath == action.bindings[j].effectivePath)
+                    {
+                        Debug.Log($"Find One Duble = Dell - {binding.effectivePath}");
+
+                        InputAction dublicateAction = action.actionMap.FindAction(binding.action);
+
+                        int bindingIndexDublicateAction = dublicateAction.bindings.IndexOf(x => x.effectivePath == binding.effectivePath);
+
+                        dublicateAction.RemoveBindingOverride(bindingIndexDublicateAction);
+
+                        foreach (var item in dublicateAction.bindings)
+                        {
+                            Debug.Log(item.effectivePath);
+                        }
+
+                    }
+                }
+            }
+        }
+
+
+
+        private bool CheckDuplicateBindings(InputAction action, int bindingIndex, bool allCompositeParts = false)
+        {
+            InputBinding newBinding = action.bindings[bindingIndex];
+            foreach (InputBinding binding in action.actionMap.bindings)
+            {
+                if (binding.action == newBinding.action)
+                {
+                    continue;
+                }
+                if (binding.effectivePath == newBinding.effectivePath)
+                {
+                    Debug.Log("Duplicate found " + newBinding.effectivePath);
+                    return true;
+                }
+            }
+            if (allCompositeParts)
+            {
+                for (int i = 1; i < bindingIndex; ++i)
+                {
+                    if (action.bindings[i].effectivePath == newBinding.effectivePath)
+                    {
+                        Debug.Log("Duplicate found " + newBinding.effectivePath);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         [Tooltip("Reference to action that is to be rebound from the UI.")]
         [SerializeField]
         private InputActionReference m_Action;
@@ -430,6 +546,12 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         }
 
 #endif
+        private void Start()
+        {
+            UpdateActionLabel();
+            UpdateBindingDisplay();
+        }
+
 
         private void UpdateActionLabel()
         {

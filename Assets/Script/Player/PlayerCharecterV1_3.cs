@@ -45,31 +45,17 @@ public class PlayerCharecterV1_3 : MonoBehaviour
         SetupPlayerCharecter();
         _playerMove.SetupPlayerMove();
         _playerAnimation.SetupPlayerAnimation();
-        var a = InputSystem.actions.actionMaps;
-        for (int i = 0; i < a.Count; i++)
-        {
-                Debug.Log($" InputSystem.actions.actionMaps {i} {a[i].name} " + a[i].enabled);
-        }
         
-        _actionMapMenu.Disable();
+        Invoke("WW", 0.1f);
     }
    
+    private void WW()
+    {
+        _actionMapMenu.Disable();
+    }
+
     private void Update()
     {
-        if (_actionMapMenu.enabled != true)
-        {
-                Debug.Log($" _actionMapMenu - Off ");
-        }
-
-        if (Keyboard.current.jKey.wasPressedThisFrame)
-        {
-            var a = InputSystem.actions.actionMaps;
-            for (int i = 0; i < a.Count; i++)
-            {
-                Debug.Log($" InputSystem.actions.actionMaps {i} {a[i].name} " + a[i].enabled);
-            }
-
-        }
         CalculateMovementInputSmoothing();
         UpdatePlayerMovement();
         UpdatePlayerAnimationMovement();
@@ -99,7 +85,6 @@ public class PlayerCharecterV1_3 : MonoBehaviour
 
     public void OnPause(InputAction.CallbackContext value)
     {
-        //value.control вызыв 2 раза перебивает друг друга
         GameManager.Instance.Pause();
     }
 
@@ -124,10 +109,7 @@ public class PlayerCharecterV1_3 : MonoBehaviour
     {
         if (value.phase == InputActionPhase.Started)
         {
-            Debug.Log(value.phase);
             _playerAnimation.PlayAttackAnimation();
-
-            Debug.Log(value.control);
         }
     }
 
@@ -140,7 +122,6 @@ public class PlayerCharecterV1_3 : MonoBehaviour
     private void CalculateMovementInputSmoothing()
     {
         _smoothInputMovement = Vector3.Lerp(_smoothInputMovement, _rawInputMovement, Time.deltaTime * _movementSmoothingSpeed);
-        //_smoothInputMovement = Vector3.SmoothDamp(_smoothInputMovement, _rawInputMovement);
     }
 
     private void UpdatePlayerMovement()
