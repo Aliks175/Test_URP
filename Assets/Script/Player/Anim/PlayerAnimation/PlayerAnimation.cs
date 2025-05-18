@@ -5,11 +5,17 @@ public class PlayerAnimation : MonoBehaviour
     private Animator _animator;
     private int _playerMovementAnimationID;
     private int _playerAttackAnimationID;
+    private int _playerGetDamageAnimationID;
+    private int _playerDieAnimationID;
+    private int _playerRespawnAnimationID;
 
     private void SetupAnimationIDs()
     {
         _playerMovementAnimationID = Animator.StringToHash("Movement");
         _playerAttackAnimationID = Animator.StringToHash("Attack");
+        _playerGetDamageAnimationID = Animator.StringToHash("Hit");
+        _playerDieAnimationID = Animator.StringToHash("OnDie");
+        _playerRespawnAnimationID = Animator.StringToHash("Respawn");
     }
 
     public void SetupPlayerAnimation()
@@ -27,5 +33,22 @@ public class PlayerAnimation : MonoBehaviour
     {
         _animator.SetTrigger(_playerAttackAnimationID);
     }
+
+    public void PlayDieAnimation()
+    {
+        _animator.SetTrigger(_playerDieAnimationID);
+    }
+
+    public void PlayGetDamageAnimation()
+    {
+        _animator.SetTrigger(_playerGetDamageAnimationID);
+    }
+
+    public void PlayRespawnAnimation()
+    {
+        _animator.SetTrigger(_playerRespawnAnimationID);
+    }
+
+
 
 }

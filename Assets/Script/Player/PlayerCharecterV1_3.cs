@@ -1,6 +1,8 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(PlayerHealth), typeof(PlayerMove), typeof(PlayerAnimation))]
 public class PlayerCharecterV1_3 : MonoBehaviour
 {
     [SerializeField] private float _movementSmoothingSpeed = 1f;
@@ -11,10 +13,13 @@ public class PlayerCharecterV1_3 : MonoBehaviour
     private InputActionMap _actionMapPlayer;
     private InputActionMap _actionMapMenu;
 
+    private PlayerHealth _playerHealth;
     private PlayerMove _playerMove;
     private PlayerAnimation _playerAnimation;
     private Vector3 _rawInputMovement;
     private Vector3 _smoothInputMovement;
+
+    private Coroutine _coroutine;
 
     private const string actionMapPlayerControls = "Player";
     private const string actionMapMenuControls = "UI";
@@ -41,10 +46,11 @@ public class PlayerCharecterV1_3 : MonoBehaviour
 
     private void Awake()
     {
-        SetUpPlayerCharecterV1_3();
         SetupPlayerCharecter();
+        SetUpPlayerCharecterV1_3();
         _playerMove.SetupPlayerMove();
         _playerAnimation.SetupPlayerAnimation();
+        _playerHealth.Respawn();
         
         Invoke("WW", 0.1f);
     }
@@ -67,6 +73,9 @@ public class PlayerCharecterV1_3 : MonoBehaviour
         _actionMapMenu = InputSystem.actions.FindActionMap(actionMapMenuControls);
         _moveAction = InputSystem.actions.FindAction("Move");
         _attackAction = InputSystem.actions.FindAction("Attack");
+
+        _playerHealth.OnHited += TakeDamage;
+        _playerHealth.OnDied += OnDied;
     }
 
     public void EnableGameplayControls()
@@ -105,18 +114,64 @@ public class PlayerCharecterV1_3 : MonoBehaviour
     {
         _rawInputMovement = Vector3.zero;
     }
+
     public void OnAttack(InputAction.CallbackContext value)
     {
         if (value.phase == InputActionPhase.Started)
         {
             _playerAnimation.PlayAttackAnimation();
+
+            if (Gamepad.current!=null)
+            {
+              Gamepad.current.SetMotorSpeeds(1f, 1f);
+            }
         }
     }
+
+    private void TakeDamage()
+    {
+        _playerAnimation.PlayGetDamageAnimation();
+        _actionMapPlayer.Disable();
+        OnStopMove();
+
+        if (_coroutine == null)
+        {
+            _coroutine = StartCoroutine(OnDizzy());
+        }
+
+    }
+
+    private void OnDied()
+    {
+        _playerAnimation.PlayDieAnimation();
+
+        _coroutine = StartCoroutine(OnRespawn());
+    }
+
+    private IEnumerator OnRespawn()
+    {
+        yield return new WaitForSeconds(5f);
+        _actionMapPlayer.Enable();
+        _playerHealth.Respawn();
+        _playerAnimation.PlayRespawnAnimation();
+        _coroutine = null;
+    }
+
+    private IEnumerator OnDizzy()
+    {
+        yield return new WaitForSeconds(2f);
+        _actionMapPlayer.Enable();
+        _coroutine = null;
+    }
+
+
+
 
     private void SetupPlayerCharecter()
     {
         _playerMove = GetComponent<PlayerMove>();
         _playerAnimation = GetComponent<PlayerAnimation>();
+        _playerHealth = GetComponent<PlayerHealth>();
     }
 
     private void CalculateMovementInputSmoothing()
