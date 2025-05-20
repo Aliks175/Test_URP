@@ -2,8 +2,19 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    [SerializeField] private Camera _mainCamera;
+    public float Speed
+    {
+        get { return _movementSpeed; }
+        set
+        {
+            if (value < 0)  value = 1; 
+           
+            _movementSpeed = value;
+        }
+    }
+
     [SerializeField] private float _movementSpeed = 3f;
+    [SerializeField] private Camera _mainCamera;
     [SerializeField] private float _turnSpeed = 0.1f;
     private Rigidbody _playerRigidbody;
     private Vector3 _movementDirection;

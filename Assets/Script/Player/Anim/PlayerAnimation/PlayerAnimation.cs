@@ -8,6 +8,7 @@ public class PlayerAnimation : MonoBehaviour
     private int _playerGetDamageAnimationID;
     private int _playerDieAnimationID;
     private int _playerRespawnAnimationID;
+    private int _playerDefenceAnimationID;
 
     private void SetupAnimationIDs()
     {
@@ -16,6 +17,7 @@ public class PlayerAnimation : MonoBehaviour
         _playerGetDamageAnimationID = Animator.StringToHash("Hit");
         _playerDieAnimationID = Animator.StringToHash("OnDie");
         _playerRespawnAnimationID = Animator.StringToHash("Respawn");
+        _playerDefenceAnimationID = Animator.StringToHash("Def");
     }
 
     public void SetupPlayerAnimation()
@@ -49,6 +51,10 @@ public class PlayerAnimation : MonoBehaviour
         _animator.SetTrigger(_playerRespawnAnimationID);
     }
 
+    public void PlayDefenceAnimation(bool result)
+    {
+        _animator.SetBool(_playerDefenceAnimationID, result);
+    }
 
 
 }

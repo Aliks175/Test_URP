@@ -8,6 +8,7 @@ public class PlayerCharecterV1_3 : MonoBehaviour
     [SerializeField] private float _movementSmoothingSpeed = 1f;
 
     private InputAction _moveAction;
+    private InputAction _defenceAction;
     private InputAction _attackAction;
     private InputAction _pauseAction;
     private InputActionMap _actionMapPlayer;
@@ -29,7 +30,8 @@ public class PlayerCharecterV1_3 : MonoBehaviour
         _attackAction.started += OnAttack;
         _actionMapMenu.FindAction("Pause").performed += OnPause;
         _actionMapPlayer.FindAction("Pause").performed += OnPause;
-
+        _defenceAction.performed += OnDefence;
+        _defenceAction.canceled += OnDefence;
         _moveAction.performed += OnMovement;
         _moveAction.canceled += OnMovement;
 
@@ -39,9 +41,13 @@ public class PlayerCharecterV1_3 : MonoBehaviour
     {
         _actionMapMenu.FindAction("Pause").performed -= OnPause;
         _actionMapPlayer.FindAction("Pause").performed -= OnPause;
+        _defenceAction.canceled -= OnDefence;
+        _defenceAction.performed -= OnDefence;
         _attackAction.started -= OnAttack;
         _moveAction.performed -= OnMovement;
         _moveAction.canceled -= OnMovement;
+
+
     }
 
     private void Awake()
@@ -51,10 +57,10 @@ public class PlayerCharecterV1_3 : MonoBehaviour
         _playerMove.SetupPlayerMove();
         _playerAnimation.SetupPlayerAnimation();
         _playerHealth.Respawn();
-        
+
         Invoke("WW", 0.1f);
     }
-   
+
     private void WW()
     {
         _actionMapMenu.Disable();
@@ -73,6 +79,7 @@ public class PlayerCharecterV1_3 : MonoBehaviour
         _actionMapMenu = InputSystem.actions.FindActionMap(actionMapMenuControls);
         _moveAction = InputSystem.actions.FindAction("Move");
         _attackAction = InputSystem.actions.FindAction("Attack");
+        _defenceAction = InputSystem.actions.FindAction("Defence");
 
         _playerHealth.OnHited += TakeDamage;
         _playerHealth.OnDied += OnDied;
@@ -121,12 +128,27 @@ public class PlayerCharecterV1_3 : MonoBehaviour
         {
             _playerAnimation.PlayAttackAnimation();
 
-            if (Gamepad.current!=null)
+            if (Gamepad.current != null)
             {
-              Gamepad.current.SetMotorSpeeds(1f, 1f);
+                Gamepad.current.SetMotorSpeeds(.1f, .1f);
             }
         }
     }
+
+    public void OnDefence(InputAction.CallbackContext value)
+    {
+        if (value.phase == InputActionPhase.Performed)
+        {
+            _playerMove.Speed = 3f;
+            _playerAnimation.PlayDefenceAnimation(true);
+        }
+        if ((value.phase == InputActionPhase.Canceled))
+        {
+            _playerMove.Speed = 5f;
+            _playerAnimation.PlayDefenceAnimation(false);
+        }
+    }
+
 
     private void TakeDamage()
     {
