@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerHealth), typeof(PlayerMove), typeof(PlayerAnimation))]
+[RequireComponent(typeof(SystemLevel))]
 public class PlayerCharecterV1_3 : MonoBehaviour
 {
     [SerializeField] private float _movementSmoothingSpeed = 1f;
@@ -14,7 +15,8 @@ public class PlayerCharecterV1_3 : MonoBehaviour
     private InputActionMap _actionMapPlayer;
     private InputActionMap _actionMapMenu;
 
-    private PlayerHealth _playerHealth;
+    private SystemLevel _playerSystemLevel;
+    public PlayerHealth _playerHealth;
     private PlayerMove _playerMove;
     private PlayerAnimation _playerAnimation;
     private Vector3 _rawInputMovement;
@@ -50,6 +52,7 @@ public class PlayerCharecterV1_3 : MonoBehaviour
 
     }
 
+
     private void Awake()
     {
         SetupPlayerCharecter();
@@ -57,13 +60,6 @@ public class PlayerCharecterV1_3 : MonoBehaviour
         _playerMove.SetupPlayerMove();
         _playerAnimation.SetupPlayerAnimation();
         _playerHealth.Respawn();
-
-        Invoke("WW", 0.1f);
-    }
-
-    private void WW()
-    {
-        _actionMapMenu.Disable();
     }
 
     private void Update()
@@ -194,6 +190,7 @@ public class PlayerCharecterV1_3 : MonoBehaviour
         _playerMove = GetComponent<PlayerMove>();
         _playerAnimation = GetComponent<PlayerAnimation>();
         _playerHealth = GetComponent<PlayerHealth>();
+        _playerSystemLevel = GetComponent<SystemLevel>();
     }
 
     private void CalculateMovementInputSmoothing()

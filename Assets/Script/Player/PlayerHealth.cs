@@ -10,7 +10,7 @@ public class PlayerHealth : MonoBehaviour, Health
 {
     [SerializeField] private int _startHealth = 3;
 
-    private int health;
+    public int health;
     public Action OnHited;
     public Action OnDied;
 
@@ -20,7 +20,7 @@ public class PlayerHealth : MonoBehaviour, Health
         Debug.Log(health);
         if (health <= 0)
         {
-        Debug.Log(" Я мертв ");
+            Debug.Log(" Я мертв ");
             Die();
         }
         OnHited?.Invoke();
