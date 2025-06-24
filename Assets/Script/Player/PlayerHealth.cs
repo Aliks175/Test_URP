@@ -4,21 +4,44 @@ using UnityEngine;
 public interface Health
 {
     public void TakeDamage();
+    public void TakeHealth(int health);
+    public void ChangeMaxHealth(int health);
 }
 
-public class PlayerHealth : MonoBehaviour, Health
+public class PlayerHealth : Health
 {
-    [SerializeField] private int _startHealth = 3;
-
-    public int health;
+    public int Health { get { return _health; } private set { _health = value; } }
+    public int MaxHealth { get { return _maxHealth; } private set { _maxHealth = value; } }
     public Action OnHited;
     public Action OnDied;
 
+    private int _health;
+    private int _maxHealth;
+
+    public PlayerHealth(int startHealth)
+    {
+        MaxHealth = startHealth;
+    }
+
+    public void TakeHealth(int health)
+    {
+        health = Mathf.Abs(health);
+
+        Health = health + Health > MaxHealth ? MaxHealth : health + Health;
+    }
+
+    public void ChangeMaxHealth(int maxHealth)
+    {
+        maxHealth = maxHealth > 0 ? Mathf.Abs(maxHealth) : 1;
+        MaxHealth = maxHealth;
+        if (Health > MaxHealth) { Health = MaxHealth; }
+    }
+
     public void TakeDamage()
     {
-        health -= 1;
-        Debug.Log(health);
-        if (health <= 0)
+        Health -= 1;
+        Debug.Log(Health);
+        if (Health <= 0)
         {
             Debug.Log(" Я мертв ");
             Die();
@@ -26,9 +49,9 @@ public class PlayerHealth : MonoBehaviour, Health
         OnHited?.Invoke();
     }
 
-    public void Respawn()
+    public void FullHealth()
     {
-        health = _startHealth;
+        Health = MaxHealth;
     }
 
     private void Die()

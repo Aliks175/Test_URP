@@ -1,13 +1,12 @@
-using NaughtyAttributes;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class SystemLevel : MonoBehaviour
+public class SystemLevel
 {
-    [SerializeField] private LevelLine levelLine;
-    [SerializeField] private List<LevelUps> listUp;
+    private CharacterData _characterData;
+    private LevelLine _levelLine;
+    private List<ILevelUps> _listUp;
     public int Level { get { return _level; } private set { _level = value; } }
 
     private int _еxperience;
@@ -19,10 +18,11 @@ public class SystemLevel : MonoBehaviour
     public event Action<SystemLevelData> OnChangeExp;
     public event Action OnLevelUp;
 
-
-    private void Start()
+    public SystemLevel(LevelLine levelLine, List<ILevelUps> listUp, CharacterData characterData)
     {
-        SetUp();
+        _levelLine = levelLine;
+        _listUp = listUp;
+        _characterData = characterData;
     }
 
     /// <summary>
@@ -30,14 +30,14 @@ public class SystemLevel : MonoBehaviour
     /// </summary>
     private void CheckUpdateLevel()
     {
-        int Leveltemp = Mathf.FloorToInt(levelLine.CurveLevel.Evaluate(_еxperience));
+        int Leveltemp = Mathf.FloorToInt(_levelLine.CurveLevel.Evaluate(_еxperience));
         if (Leveltemp > Level)
         {
             for (; Level < Leveltemp; Level++)
             {
-                foreach (var level in listUp)
+                foreach (var level in _listUp)
                 {
-                    level.LevelUp(this);
+                    level.LevelUp(_characterData);
                 }
                 OnLevelUp?.Invoke();
             }
@@ -68,11 +68,9 @@ public class SystemLevel : MonoBehaviour
     /// <summary>
     /// Просчет и заполенние полей , сколько осталось опыта , и процентное соотношение
     /// </summary>
-    [Button]
-
     private void CalculateExp()
     {
-        var keysLevelUpLine = levelLine.CurveLevel.keys;// получаем все точки кривой 1 точка ровна 1 уровню
+        var keysLevelUpLine = _levelLine.CurveLevel.keys;// получаем все точки кривой 1 точка ровна 1 уровню
         float ExpNextLevel = 0; // количество опыта следующего уровня 
 
         if (keysLevelUpLine.Length < Level + 1)
@@ -96,9 +94,9 @@ public class SystemLevel : MonoBehaviour
     /// <summary>
     /// Стартовая предустановка 
     /// </summary>
-    public void SetUp()
+    public void Initialization()
     {
-        Level = Mathf.FloorToInt(levelLine.CurveLevel.Evaluate(_еxperience));
+        Level = Mathf.FloorToInt(_levelLine.CurveLevel.Evaluate(_еxperience));
         CalculateExp();
         OnSetUp?.Invoke(new SystemLevelData()
         {

@@ -10,10 +10,11 @@ public class Experience : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!isactive) return;
-        if (other.TryGetComponent<SystemLevel>(out SystemLevel component))
+        var playerData = other.gameObject.GetComponent<ICharacterData>();
+        if (playerData != null)
         {
             isactive = false;
-            component.SetEx(_åxperience);
+            playerData.SystemLevel.SetEx(_åxperience);
             _body.SetActive(false);
             StartCoroutine(WaitUpdate());
         }

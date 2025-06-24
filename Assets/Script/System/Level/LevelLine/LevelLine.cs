@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "LevelProgress", menuName = "System/Level")]
+[CreateAssetMenu(fileName = "LevelProgress", menuName = "System/Level/LevelProgress")]
 public class LevelLine : ScriptableObject
 {
     [SerializeField] private AnimationCurve _curve;

@@ -4,25 +4,25 @@ using UnityEngine.UI;
 
 public class ShowPlayerStat : MonoBehaviour
 {
-    [SerializeField] private SystemLevel characterData;
+    [SerializeField] private CharacterData characterData;
 
     [SerializeField] private Slider sliderRangeExpDoNextLevel;
     [SerializeField] private TextMeshProUGUI _level;
     [SerializeField] private TextMeshProUGUI _expNow;
     [SerializeField] private TextMeshProUGUI _expNextLevel;
 
-    private void Awake()
+    private void OnEnable()
     {
-        characterData.OnChangeExp += ChangeExp;
-        characterData.OnLevelUp += ChangeLevel;
-        characterData.OnSetUp += SetUp;
+        characterData.SystemLevel.OnChangeExp += ChangeExp;
+        characterData.SystemLevel.OnLevelUp += ChangeLevel;
+        characterData.SystemLevel.OnSetUp += SetUp;
     }
 
     private void OnDisable()
     {
-        characterData.OnChangeExp -= ChangeExp;
-        characterData.OnLevelUp -= ChangeLevel;
-        characterData.OnSetUp -= SetUp;
+        characterData.SystemLevel.OnChangeExp -= ChangeExp;
+        characterData.SystemLevel.OnLevelUp -= ChangeLevel;
+        characterData.SystemLevel.OnSetUp -= SetUp;
     }
 
     private void ChangeExp(SystemLevelData expData)// Событие по изменению колво опыта 

@@ -7,7 +7,7 @@ public class Pause : MonoBehaviour
     private bool _paused = false;
     public bool Paused { get{ return _paused; } private set { _paused = value; } }
 
-    public void OnPause(PlayerCharecterV1_3 playerCharecterV1_3)
+    public void OnPause(PlayerCharecter playerCharecterV1_3)
     {
         Paused = !Paused;
         if (Paused)

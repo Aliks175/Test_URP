@@ -1,26 +1,26 @@
-using Unity.VisualScripting;
-using UnityEngine;
-
-public class LevelUpHealth :  LevelUps
+public class LevelUpHealth : ILevelUps
 {
-    [SerializeField] private int _valueHP = 1;
-    [SerializeField] private int _minLevel = 3;
+    private int _valueHP = 1;
+    private int _minLevel = 3;
 
-    private PlayerCharecterV1_3 player;
-    public override void LevelUp(SystemLevel systemLevel)
+    public LevelUpHealth(int valueHp, int minLevel)
     {
-        if (systemLevel.Level >= _minLevel)
+        _valueHP = valueHp;
+        _minLevel = minLevel;
+    }
+
+    public void LevelUp(CharacterData systemLevel)
+    {
+        if (systemLevel.SystemLevel.Level >= _minLevel)
         {
-            player = player ?? systemLevel.GetComponent<PlayerCharecterV1_3>();
-
-            if (player == null) return;
-
-            HPUP(player);
+            HPUP(systemLevel);
         }
     }
 
-    private void HPUP(PlayerCharecterV1_3 playerCharecter)
+    private void HPUP(CharacterData playerCharecter)
     {
-        playerCharecter._playerHealth.health += _valueHP;
+        PlayerHealth playerHealth = playerCharecter.PlayerHealth;
+
+        playerHealth.ChangeMaxHealth(playerHealth.MaxHealth + _valueHP);
     }
 }
