@@ -3,12 +3,11 @@ using UnityEngine;
 
 public class UiItem : MonoBehaviour, IUiItem, ICrafteble
 {
-    public string Name => _name;
+    public string NameId => _name;
     [SerializeField] private List<AbilityItem> _listAbility;
     [SerializeField] private bool isDestroyForOver = false;
     [SerializeField] private string _name = "None";
     private ICharacterData _characterData;
-
 
     public void Initialization(ICharacterData characterData)
     {

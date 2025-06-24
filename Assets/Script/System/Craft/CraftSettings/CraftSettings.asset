@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52a04e443eaf3e647a91be95b18f3f48, type: 3}
   m_Name: CraftSettings
   m_EditorClassIdentifier: 
-  craftCombinations:
+  CraftCombinations:
   - Source:
-    - 5
     - 4
+    - 5
     Result: {fileID: 1212822084470756539, guid: f88dfa5be5caa2d42abefdb16b4044bc, type: 3}

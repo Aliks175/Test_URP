@@ -24,5 +24,4 @@ public class GiveItem : MonoBehaviour
             Debug.LogError($"Not found UiItem {this.name} ");
         }
     }
-
 }

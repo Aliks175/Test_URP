@@ -7,5 +7,4 @@ public class AbilityItemPrintText : AbilityItem
     {
         Debug.Log(_text);
     }
-
 }

@@ -54,7 +54,7 @@ public class CharacterData : MonoBehaviour, ICharacterData
     private void SetUp()
     {
         _inventory.Initialization(this);
-        _playerHealth.FullHealth();
+        _playerHealth.Initialization();
         _systemLevel.Initialization();
     }
 }

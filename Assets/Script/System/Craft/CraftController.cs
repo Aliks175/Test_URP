@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class CraftController : MonoBehaviour
 {
     [SerializeField] private GameObject _inventaryPool;
-    public CraftSettings settings;
+    [SerializeField] private CraftSettings settings;
     private List<GameObject> selected = new();
     private List<ICrafteble> items = new();
 
@@ -31,7 +31,6 @@ public class CraftController : MonoBehaviour
             button = ((MonoBehaviour)item)?.gameObject.AddComponent<Button>();
             button.onClick.AddListener(() => { Select(button.gameObject); });
         }
-
     }
 
     private void Select(GameObject CurrentObject)
@@ -55,12 +54,11 @@ public class CraftController : MonoBehaviour
         List<string> selectedName = new();
         foreach (var item in selected)
         {
-            string name = item.GetComponent<ICrafteble>().Name;
+            string name = item.GetComponent<ICrafteble>().NameId;
             selectedName.Add(name);
         }
-
         selectedName.Sort();
-        foreach (var combination in settings.craftCombinations)
+        foreach (var combination in settings.CraftCombinations)
         {
             if (combination.Source.SequenceEqual(selectedName))
             {
@@ -69,7 +67,7 @@ public class CraftController : MonoBehaviour
                 {
                     Destroy(item);
                 }
-                    Instantiate(combination.Result, _inventaryPool.transform, false);
+                Instantiate(combination.Result, _inventaryPool.transform, false);
                 Refresh();
             }
         }
@@ -79,5 +77,4 @@ public class CraftController : MonoBehaviour
     {
         EnterCraftMode();
     }
-
 }

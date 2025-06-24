@@ -10,17 +10,43 @@ public interface Health
 
 public class PlayerHealth : Health
 {
-    public int Health { get { return _health; } private set { _health = value; } }
-    public int MaxHealth { get { return _maxHealth; } private set { _maxHealth = value; } }
+    public int Health
+    {
+        get { return _health; }
+        private set { _health = value; }
+    }
+
+    public int MaxHealth
+    {
+        get { return _maxHealth; }
+        private set
+        {
+            if (_maxHealth != value)
+            {
+                _maxHealth = value;
+                if (viewHealth != null) { viewHealth.Health = _maxHealth.ToString(); }
+            }
+        }
+    }
+
     public Action OnHited;
     public Action OnDied;
 
     private int _health;
     private int _maxHealth;
+    private ViewHealth viewHealth;
 
     public PlayerHealth(int startHealth)
     {
         MaxHealth = startHealth;
+    }
+
+    public void Initialization()
+    {
+        viewHealth = GameObject.FindFirstObjectByType<ViewHealth>();
+        if (viewHealth == null) { Debug.LogError($"Not Found ViewHealth In PlayerHealth"); }
+        else { viewHealth.Health = MaxHealth.ToString(); }
+        FullHealth();
     }
 
     public void TakeHealth(int health)
